@@ -19,8 +19,6 @@ public class Activity {
 
     private Date activityDate;
 
-    private Integer duration;
-
     private String activityDescribe;
 
     private String activityIcon;

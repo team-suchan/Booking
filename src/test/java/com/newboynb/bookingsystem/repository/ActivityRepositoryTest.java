@@ -27,7 +27,6 @@ public class ActivityRepositoryTest {
         Calendar calendar = Calendar.getInstance();
         calendar.set(2018, Calendar.OCTOBER, 30);
         activity.setActivityDate(new Date(calendar.getTimeInMillis()));
-        activity.setDuration(60);
         activity.setCategoryId(KeyUtil.getUUID(10));
         activity.setOwnerId(KeyUtil.getUUID(10));
         System.out.println(activity);
