@@ -1,6 +1,8 @@
 package com.newboynb.bookingsystem.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.newboynb.bookingsystem.dataobject.Category;
+import com.newboynb.bookingsystem.utils.Date2LongSerializer;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,6 +16,7 @@ public class ActivityVO {
 
     private Float ActivityGrade;
 
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date activityDate;
 
     private String activityDescribe;

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ActivityController {
 
     @Autowired
@@ -28,9 +29,9 @@ public class ActivityController {
     private CategoryService categoryService;
 
     @RequestMapping("/activity")
-    public ResultVO list(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public ResultVO list(@RequestParam(value = "page", defaultValue = "1") Integer page,
                          @RequestParam(value = "size", defaultValue = "30") Integer size) {
-        PageRequest request = PageRequest.of(page, size);
+        PageRequest request = PageRequest.of(page - 1, size);
         Page<Activity> activityPage = activityService.findAll(request);
         List<ActivityVO> activityVOList = new ArrayList<>();
         for (Activity activity: activityPage) {
