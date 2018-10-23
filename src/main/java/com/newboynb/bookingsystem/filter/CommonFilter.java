@@ -15,7 +15,6 @@ public class CommonFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         ((HttpServletResponse) servletResponse).setHeader("Access-Control-Allow-Origin", "*");
-        System.out.println("doFilter.........");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
