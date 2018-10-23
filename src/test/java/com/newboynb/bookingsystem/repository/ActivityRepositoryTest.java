@@ -33,17 +33,4 @@ public class ActivityRepositoryTest {
         Activity result = repository.save(activity);
         Assert.assertNotNull(result);
     }
-
-    @Test
-    public void findByIdTest() {
-        if (repository.findById("1539766400243509682").isPresent()) {
-            repository.findById("1539766400243509682").get();
-        } else {
-            throw new RuntimeException();
-        }
-    }
-
-    @Test
-    public void findAllTest() {
-    }
 }
