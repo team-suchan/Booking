@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -30,7 +32,7 @@ public class ActivityController {
 
     @RequestMapping("/activity")
     public ResultVO list(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                         @RequestParam(value = "size", defaultValue = "30") Integer size) {
+                         @RequestParam(value = "size", defaultValue = "16") Integer size) {
         PageRequest request = PageRequest.of(page - 1, size);
         Page<Activity> activityPage = activityService.findAll(request);
         List<ActivityVO> activityVOList = new ArrayList<>();
@@ -43,6 +45,10 @@ public class ActivityController {
             }
             activityVOList.add(activityVO);
         }
-        return ResultVOUtil.success(activityVOList);
+        Map<String, Object> map = new HashMap<>();
+        map.put("activityList", activityVOList);
+        map.put("totalPages", activityPage.getTotalPages());
+        map.put("currentPage", page);
+        return ResultVOUtil.success(map);
     }
 }
