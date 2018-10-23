@@ -26,4 +26,6 @@ public class Activity {
     private String categoryId;
 
     private String ownerId;
+
+    private String activityAddress;
 }

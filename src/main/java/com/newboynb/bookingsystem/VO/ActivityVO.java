@@ -26,4 +26,6 @@ public class ActivityVO {
     private Category category;
 
     private String ownerId;
+
+    private String activityAddress;
 }

@@ -29,6 +29,7 @@ public class ActivityRepositoryTest {
         activity.setActivityDate(new Date(calendar.getTimeInMillis()));
         activity.setCategoryId(KeyUtil.getUUID(10));
         activity.setOwnerId(KeyUtil.getUUID(10));
+        activity.setActivityAddress("广州");
         System.out.println(activity);
         Activity result = repository.save(activity);
         Assert.assertNotNull(result);
