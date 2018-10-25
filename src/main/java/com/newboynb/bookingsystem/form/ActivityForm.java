@@ -1,24 +1,16 @@
-package com.newboynb.bookingsystem.dataobject;
+package com.newboynb.bookingsystem.form;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 
-@Entity
 @Data
-@DynamicUpdate
-public class Activity {
-
-    @Id
-    private String activityId;
+public class ActivityForm {
 
     private String activityName;
 
-    private Float ActivityGrade;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date activityDate;
 
     private String activityDescribe;
@@ -31,7 +23,9 @@ public class Activity {
 
     private String activityAddress;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date startBookTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date endBookTime;
 }

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +32,17 @@ public class UserController {
         }
         if (!password.equals(user.getPassword())) {
             throw new BookingException(ResultEnum.PASSWORD_ERROR);
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return ResultVOUtil.success(userVO);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResultVO getUserInfo(@PathVariable(value = "userId") String userId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new BookingException(ResultEnum.USER_NOT_EXIST);
         }
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
@@ -58,14 +71,29 @@ public class UserController {
         return ResultVOUtil.success(userVO);
     }
 
-    @PutMapping("/usr/{userId}")
-    public ResultVO update(@PathVariable(value = "userId") String userId, @Valid User form) {
+    @PutMapping("/user/{userId}")
+    public ResultVO update(@PathVariable(value = "userId") String userId, String phone) {
         User user = userService.findById(userId);
         if (user == null) {
             throw new BookingException(ResultEnum.USER_NOT_EXIST);
         }
-        user.setPassword(form.getPassword());
-        user.setPhone(form.getPhone());
+        user.setPhone(phone);
+        User result = userService.save(user);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(result, userVO);
+        return ResultVOUtil.success(userVO);
+    }
+
+    @PostMapping("/user/findPassword")
+    public ResultVO findPassword(String email, String phone, String password) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            throw new BookingException(ResultEnum.USER_NOT_EXIST);
+        }
+        if (!phone.equals(user.getPhone())) {
+            throw new BookingException(ResultEnum.PHONE_MISMATCHING);
+        }
+        user.setPassword(password);
         User result = userService.save(user);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(result, userVO);

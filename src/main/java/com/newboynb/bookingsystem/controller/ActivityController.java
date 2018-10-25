@@ -4,24 +4,25 @@ import com.newboynb.bookingsystem.VO.ActivityVO;
 import com.newboynb.bookingsystem.VO.ResultVO;
 import com.newboynb.bookingsystem.dataobject.Activity;
 import com.newboynb.bookingsystem.dataobject.Category;
+import com.newboynb.bookingsystem.enums.BookingStatusEnum;
+import com.newboynb.bookingsystem.enums.ResultEnum;
+import com.newboynb.bookingsystem.exception.BookingException;
+import com.newboynb.bookingsystem.form.ActivityForm;
 import com.newboynb.bookingsystem.service.ActivityService;
 import com.newboynb.bookingsystem.service.CategoryService;
+import com.newboynb.bookingsystem.utils.KeyUtil;
 import com.newboynb.bookingsystem.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/activity")
 public class ActivityController {
 
     @Autowired
@@ -30,11 +31,16 @@ public class ActivityController {
     @Autowired
     private CategoryService categoryService;
 
-    @RequestMapping("/activity")
+    @GetMapping("")
     public ResultVO list(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                         @RequestParam(value = "size", defaultValue = "16") Integer size) {
+                         @RequestParam(value = "size", defaultValue = "16") Integer size, String categoryId) {
         PageRequest request = PageRequest.of(page - 1, size);
-        Page<Activity> activityPage = activityService.findAll(request);
+        Page<Activity> activityPage;
+        if (categoryId == null) {
+            activityPage = activityService.findAll(request);
+        } else {
+            activityPage = activityService.findAllByCategoryId(categoryId, request);
+        }
         List<ActivityVO> activityVOList = new ArrayList<>();
         for (Activity activity: activityPage) {
             ActivityVO activityVO = new ActivityVO();
@@ -43,6 +49,7 @@ public class ActivityController {
             if (category != null) {
                 activityVO.setCategory(category);
             }
+            activityVO.setBookingStatus(getBookingStatus(activity.getStartBookTime().getTime(), activity.getEndBookTime().getTime()));
             activityVOList.add(activityVO);
         }
         Map<String, Object> map = new HashMap<>();
@@ -50,5 +57,54 @@ public class ActivityController {
         map.put("totalPages", activityPage.getTotalPages());
         map.put("currentPage", page);
         return ResultVOUtil.success(map);
+    }
+
+    @GetMapping("{activityId}")
+    public ResultVO findOneActivity(@PathVariable(value = "activityId") String activityId) {
+        Activity activity = activityService.findById(activityId);
+        if (activity == null) {
+            throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
+        }
+        ActivityVO activityVO = new ActivityVO();
+        BeanUtils.copyProperties(activity, activityVO);
+        Category category = categoryService.findById(activity.getCategoryId());
+        if (category != null) {
+            activityVO.setCategory(category);
+        }
+        activityVO.setBookingStatus(getBookingStatus(activity.getStartBookTime().getTime(), activity.getEndBookTime().getTime()));
+        return ResultVOUtil.success(activityVO);
+    }
+
+    @PostMapping("")
+    public ResultVO add(@Valid ActivityForm form) {
+        Activity activity = new Activity();
+        BeanUtils.copyProperties(form, activity);
+        activity.setActivityId(KeyUtil.getUUID(10));
+        activityService.save(activity);
+        Map<String, Object> map = new HashMap<>();
+        map.put("activityId", activity.getActivityId());
+        return ResultVOUtil.success(map);
+    }
+
+    @PutMapping("/{activityId}")
+    public ResultVO update(@Valid ActivityForm form, @PathVariable(value = "activityId") String activityId) {
+        Activity activity = activityService.findById(activityId);
+        if (activity == null) {
+            throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
+        }
+        BeanUtils.copyProperties(form, activity);
+        activityService.save(activity);
+        return ResultVOUtil.success(null);
+    }
+
+    private String getBookingStatus(long startTime, long endTime) {
+        long now = System.currentTimeMillis();
+        if (now >= startTime && now <= endTime) {
+            return BookingStatusEnum.CURRENT.getStatus();
+        } else if (now < startTime) {
+            return BookingStatusEnum.BEFORE.getStatus();
+        } else {
+            return BookingStatusEnum.AFTER.getStatus();
+        }
     }
 }

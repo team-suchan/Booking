@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ActivityServiceImpl implements ActivityService {
 
@@ -17,5 +19,20 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Page<Activity> findAll(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Activity> findAllByCategoryId(String categoryId, Pageable pageable) {
+        return repository.findAllByCategoryId(categoryId, pageable);
+    }
+
+    @Override
+    public Activity findById(String activityId) {
+        return repository.findById(activityId).orElse(null);
+    }
+
+    @Override
+    public Activity save(Activity activity) {
+        return repository.save(activity);
     }
 }

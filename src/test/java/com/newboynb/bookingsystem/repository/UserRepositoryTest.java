@@ -22,18 +22,9 @@ public class UserRepositoryTest {
         user.setUserId(KeyUtil.getUniqueKey());
         user.setUsername("张三");
         user.setPassword("123456");
+        user.setPhone("12345678901");
         user.setEmail("297354270@qq.com");
         User result = repository.save(user);
         Assert.assertNotNull(result);
-    }
-
-    @Test
-    public void findByIdTest() {
-        if (repository.findById("1539854673105925891").isPresent()) {
-            User user = repository.findById("1539854673105925891").get();
-            Assert.assertEquals("1539854673105925891", user.getUserId());
-        } else {
-            throw new RuntimeException();
-        }
     }
 }
