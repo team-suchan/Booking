@@ -98,7 +98,7 @@ public class ActivityController {
             throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
         }
         //判断权限
-        AuthUtil.auth(request, activity.getOwnerId());
+        (new AuthUtil()).auth(request, activity.getOwnerId());
 
         BeanUtils.copyProperties(form, activity);
         activityService.save(activity);

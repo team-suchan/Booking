@@ -84,6 +84,6 @@ public class SessionController {
         if (activity == null) {
             throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
         }
-        AuthUtil.auth(request, activity.getOwnerId());
+        (new AuthUtil()).auth(request, activity.getOwnerId());
     }
 }

@@ -14,14 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthUtil {
 
     @Autowired
-    private static StringRedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 判断登录权限
      * @param request
      * @param userId
      */
-    public static void auth(HttpServletRequest request, String userId) {
+    public void auth(HttpServletRequest request, String userId) {
         Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
         if (cookie == null) {
             throw new BookingException(ResultEnum.AUTH_FAIL);
