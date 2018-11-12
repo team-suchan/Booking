@@ -24,14 +24,4 @@ public class CategoryRepositoryTest {
         Category result = repository.save(category);
         Assert.assertNotNull(result);
     }
-
-    @Test
-    public void findByIdTest() {
-        if (repository.findById("123").isPresent()) {
-            Category category = repository.findById("123").get();
-            Assert.assertEquals("123", category.getCategoryId());
-        } else {
-            throw new RuntimeException();
-        }
-    }
 }
