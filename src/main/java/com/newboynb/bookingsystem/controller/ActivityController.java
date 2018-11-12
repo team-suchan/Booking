@@ -10,6 +10,7 @@ import com.newboynb.bookingsystem.exception.BookingException;
 import com.newboynb.bookingsystem.form.ActivityForm;
 import com.newboynb.bookingsystem.service.ActivityService;
 import com.newboynb.bookingsystem.service.CategoryService;
+import com.newboynb.bookingsystem.utils.AuthUtil;
 import com.newboynb.bookingsystem.utils.KeyUtil;
 import com.newboynb.bookingsystem.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -43,14 +45,7 @@ public class ActivityController {
         }
         List<ActivityVO> activityVOList = new ArrayList<>();
         for (Activity activity: activityPage) {
-            ActivityVO activityVO = new ActivityVO();
-            BeanUtils.copyProperties(activity, activityVO);
-            Category category = categoryService.findById(activity.getCategoryId());
-            if (category != null) {
-                activityVO.setCategory(category);
-            }
-            activityVO.setBookingStatus(getBookingStatus(activity.getStartBookTime().getTime(), activity.getEndBookTime().getTime()));
-            activityVOList.add(activityVO);
+            activityVOList.add(getActivityVO(activity));
         }
         Map<String, Object> map = new HashMap<>();
         map.put("activityList", activityVOList);
@@ -75,6 +70,16 @@ public class ActivityController {
         return ResultVOUtil.success(activityVO);
     }
 
+    @GetMapping("/findByUserId")
+    public ResultVO findByUserId(String userId) {
+        List<Activity> activityList = activityService.findByUserId(userId);
+        List<ActivityVO> activityVOList = new ArrayList<>();
+        for (Activity activity : activityList) {
+            activityVOList.add(getActivityVO(activity));
+        }
+        return ResultVOUtil.success(activityVOList);
+    }
+
     @PostMapping("")
     public ResultVO add(@Valid ActivityForm form) {
         Activity activity = new Activity();
@@ -87,14 +92,28 @@ public class ActivityController {
     }
 
     @PutMapping("/{activityId}")
-    public ResultVO update(@Valid ActivityForm form, @PathVariable(value = "activityId") String activityId) {
+    public ResultVO update(@Valid ActivityForm form, @PathVariable(value = "activityId") String activityId, HttpServletRequest request) {
         Activity activity = activityService.findById(activityId);
         if (activity == null) {
             throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
         }
+        //判断权限
+        AuthUtil.auth(request, activity.getOwnerId());
+
         BeanUtils.copyProperties(form, activity);
         activityService.save(activity);
         return ResultVOUtil.success(null);
+    }
+
+    private ActivityVO getActivityVO(Activity activity) {
+        ActivityVO activityVO = new ActivityVO();
+        BeanUtils.copyProperties(activity, activityVO);
+        Category category = categoryService.findById(activity.getCategoryId());
+        if (category != null) {
+            activityVO.setCategory(category);
+        }
+        activityVO.setBookingStatus(getBookingStatus(activity.getStartBookTime().getTime(), activity.getEndBookTime().getTime()));
+        return activityVO;
     }
 
     private String getBookingStatus(long startTime, long endTime) {

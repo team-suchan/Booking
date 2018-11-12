@@ -15,4 +15,6 @@ public interface ActivityService {
     Activity findById(String activityId);
 
     Activity save(Activity activity);
+
+    List<Activity> findByUserId(String userId);
 }
