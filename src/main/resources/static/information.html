@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+
+	<head>
+		<meta charset=utf-8>
+		<title>个人中心-个人信息</title>
+		<link href="css/trade_list_out.css" rel="stylesheet">
+		<link href="css/information.css" rel="stylesheet"> 
+		<script src="js/jquery.min.js" type="text/javascript"></script>
+		<script>
+			$(function(){
+				var loc = location.href;
+			  	var n1 = loc.length;
+			  	var n2 = loc.indexOf("userId=");
+			  	var id = loc.substr(n2+7, n1-n2-6);
+			  	if(n2!=-1){
+			  		$.ajax({
+						url: 'http://111.230.220.64:8080/api/user/' + id,
+						type: "GET",
+						success: function(data) {
+							$("#comeon").html("欢迎回来！"+data.data.username);
+							$(".userid").html(data.data.userId);
+							$(".username").html(data.data.username);
+							$(".phone").html(data.data.phone);
+							$(".email").html(data.data.email);
+						}
+					});
+			  		document.getElementById("myBooking").href="personal.html?"+"userId="+id;
+			  		document.getElementById("back").href="index.html?"+"userId="+id;
+			  	};
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="bp-center-box">
+			<div id="bp_left">
+				<div id="bp_user_box">
+					<div class="loading" style="display: none;"></div>
+					<div class="user-info" style="">
+						<div class="bp-user-box-top">
+							<p id="comeon">欢迎回来！</p>
+							<div class="bp-user-box">
+								<div class="bp-user-box-bb">订单数<i>5</i></div>
+								<div class="bp-user-box-bk">已参加<i>1</i></div>
+							</div>
+						</div>
+						<div class="bp-user-box-bottom">
+							<p>安全等级</p>
+							<a href="#" target="_blank" style="cursor: default;"><i class="level-in" style="background-color: rgb(89, 187, 114); width: 100%;"></i></a>
+							<div class="level-box"><i class="level-dia" style="background-color: rgb(89, 187, 114);">高</i>
+								<a target="_blank" href="https://account.bilibili.com/site" style="display: none;">提升安全等级&gt;</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="bp_menu_box">
+					<div class="bp_box">
+						<div class="bp_box_bot">
+							<a href="" class="bp_box_bot_click">个人信息</a>
+							<a href="" class="myBooking" id="myBooking">我的订单</a>
+							<a href="" class="">已发布活动</a>
+							<a href="" class="" id="back">返回主页</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="bp-right">
+				<div data-v-de13881c="">
+					<div data-v-de13881c="" class="bb-intro-top">
+						<div data-v-de13881c="" class="bb-icon"></div>
+						<a data-v-de13881c="" class="b-icon-title">个人信息 </a>
+					</div>
+					<div data-v-de13881c="" class="spend-recode">
+
+						<div data-v-de13881c="" class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%;">
+
+							<div class="ibox-content clearfix amp-form-style1">
+								
+									<table class="ui_table">
+										<tbody>
+											<tr>
+												<th width="154">用户ID：</th>
+												<td>
+													<p class="userid"></p>
+												</td>
+											</tr>
+											
+											<tr>
+												<th width="154">昵称：</th>
+												<td>
+													<p class="username"></p>
+												</td>
+											</tr>
+											
+											<tr>
+												<th width="154">手机：</th>
+												<td>
+													<p class="phone"></p>
+												</td>
+											</tr>
+											
+											<tr>
+												<th width="154">邮箱：</th>
+												<td>
+													<p class="email"></p>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

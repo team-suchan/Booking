@@ -5,7 +5,7 @@ function getdata(data) {
 		//				var timeType = time.getFullYear() + "." + time.getMonth() + "." + time.getDate() + " " + time.getHours() + ":" + time.getMinutes()
 		list +=
 			"<div class='project-list-item'>" +
-			"<a href='http://www.baidu.com'>" +
+			"<a href='introducePage.html?activityId="+encodeURI(data.data.activityList[i].activityId)+"'>" +
 			"<div class='project-list-item-img' style='background-image: url(img/zero2.gif);'></div>" +
 			"<div class='project-list-item-detail'>" +
 			"<div class='project-list-item-title'>" + data.data.activityList[i].activityName + " (" + data.data.activityList[i].category.categoryName + ")</div>" +

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="css/style1.css" rel="stylesheet">
+		<link href="css/style2.css" rel="stylesheet">
+		<link href="css/style.min862f.css" rel="stylesheet">
+		<script src="js/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#btn").click(function() {
+					$.ajax({
+						url: 'http://111.230.220.64:8080/api/activity',
+						type: "GET",
+						success: function(data) {
+							$("#text").val(data.data[1].activityName);
+						}
+					});
+				});
+			});
+		</script>
+		<script src="js/getjson.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+		<input id="btn" type="button" value="跨域获取数据" />
+		<textarea id="text" style="width: 400px; height: 100px;"></textarea>
+		<div class="project-list-wrapper">
+			<div class="project-list">
+				
+			</div>
+		</div>
+	</body>
+
+</html>
