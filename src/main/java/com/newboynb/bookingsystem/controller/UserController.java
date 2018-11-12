@@ -65,7 +65,7 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public ResultVO getUserInfo(@PathVariable(value = "userId") String userId, HttpServletRequest request) {
         //判断权限
-        (new AuthUtil()).auth(request, userId);
+        AuthUtil.auth(redisTemplate, request, userId);
         // 从数据库中查找用户信息
         User user = userService.findById(userId);
         // 如何没有该ID对应的用户返回错误信息
@@ -102,7 +102,7 @@ public class UserController {
     @PutMapping("/user/{userId}")
     public ResultVO update(@PathVariable(value = "userId") String userId, String phone, HttpServletRequest request) {
         //判断权限
-        (new AuthUtil()).auth(request, userId);
+        AuthUtil.auth(redisTemplate, request, userId);
 
         User user = userService.findById(userId);
         if (user == null) {

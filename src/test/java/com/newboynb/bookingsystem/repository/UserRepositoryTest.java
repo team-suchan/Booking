@@ -15,16 +15,4 @@ public class UserRepositoryTest {
 
     @Autowired
     private UserRepository repository;
-
-    @Test
-    public void saveTest() {
-        User user = new User();
-        user.setUserId(KeyUtil.getUniqueKey());
-        user.setUsername("张三");
-        user.setPassword("123456");
-        user.setPhone("12345678901");
-        user.setEmail("297354270@qq.com");
-        User result = repository.save(user);
-        Assert.assertNotNull(result);
-    }
 }

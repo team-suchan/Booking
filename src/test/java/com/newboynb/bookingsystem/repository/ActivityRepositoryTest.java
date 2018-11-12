@@ -18,20 +18,4 @@ public class ActivityRepositoryTest {
 
     @Autowired
     private ActivityRepository repository;
-
-    @Test
-    public void saveTest() {
-        Activity activity = new Activity();
-        activity.setActivityId(KeyUtil.getUUID(10));
-        activity.setActivityName("软件工程考试");
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2018, Calendar.OCTOBER, 28);
-        activity.setActivityDate(new Date(calendar.getTimeInMillis()));
-        activity.setCategoryId(KeyUtil.getUUID(10));
-        activity.setOwnerId(KeyUtil.getUUID(10));
-        activity.setActivityAddress("大学城");
-        System.out.println(activity);
-        Activity result = repository.save(activity);
-        Assert.assertNotNull(result);
-    }
 }
