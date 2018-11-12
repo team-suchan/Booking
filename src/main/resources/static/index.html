@@ -5,11 +5,30 @@
 		<meta charset="UTF-8">
 
 		<title>主页</title>
-		<link rel="shortcut icon" href="img/icon.jpg" />
+		<link rel="shortcut icon" href="img/logo.jpg" />
 		<link href="css/style1.css" rel="stylesheet">
 		<link href="css/style2.css" rel="stylesheet">
 		<script src="js/jquery.min.js" type="text/javascript"></script>
 		<script src="js/getjson.js" type="text/javascript"></script>
+		<script>
+			$(function(){
+				var loc = location.href;
+			  	var n1 = loc.length;
+			  	var n2 = loc.indexOf("userId=");
+			  	var id = decodeURI(loc.substr(n2+7, n1-n2-6));
+			  	if(n2!=-1){
+			  		getname(id);
+			  		$(".order-and-icon-wrapper").click(function(){
+			  			location.href="personal.html";
+			  		});
+			  	}
+			  	else{
+			  		$(".order-and-icon-wrapper").click(function(){
+			  			location.href="login.html";
+			  		});
+			  	}
+			});
+		</script>
 	</head>
 
 	<body>
@@ -40,13 +59,7 @@
 					<div class="title type-title">类型:</div>
 					<div class="selector-content">
 						<ul class="type-list">
-							<li class="current-type"><span class="active">全部类型
-			                        </span></li>
-							<li class="current-type"><span class="">讲座
-			                       </span></li>
-							<li class="current-type"><span class="">宣讲会
-			                       </span></li>
-							<li class="current-type"><span class="">班会
+							<li class="current-type" onclick="getall()"><span class="">全部类型
 			                       </span></li>
 						</ul>
 					</div>
@@ -61,9 +74,9 @@
 			</div>
 			<div class="whole-pagination-wrapper">
 				<div class="pagination-wrapper">
-					<div class="arrow pagination-left-arrow disabled"></div>
-					<div class="pagination"><span class="pageNum active">1</span></div>
-					<div class="arrow pagination-right-arrow disabled"></div>
+					<div class="arrow pagination-left-arrow" onclick="getback()"></div>
+					<div class="pagination"><span class="pageNum active" id="pageNumber">1</span></div>
+					<div class="arrow pagination-right-arrow" onclick="getnext();"></div>
 				</div>
 			</div>
 
