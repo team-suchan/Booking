@@ -35,4 +35,9 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity save(Activity activity) {
         return repository.save(activity);
     }
+
+    @Override
+    public List<Activity> findByUserId(String userId) {
+        return repository.findAllByOwnerId(userId);
+    }
 }
