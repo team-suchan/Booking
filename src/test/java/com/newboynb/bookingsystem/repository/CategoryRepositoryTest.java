@@ -15,4 +15,9 @@ public class CategoryRepositoryTest {
 
     @Autowired
     private CategoryRepository repository;
+
+    @Test
+    public void findTest() {
+        repository.findAll();
+    }
 }

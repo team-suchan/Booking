@@ -18,4 +18,9 @@ public class SessionRepositoryTest {
 
     @Autowired
     private SessionRepository repository;
+
+    @Test
+    public void findTest() {
+        repository.findAll();
+    }
 }

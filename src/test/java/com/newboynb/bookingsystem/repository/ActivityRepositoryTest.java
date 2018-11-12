@@ -18,4 +18,9 @@ public class ActivityRepositoryTest {
 
     @Autowired
     private ActivityRepository repository;
+
+    @Test
+    public void findTest() {
+        repository.findAll();
+    }
 }
