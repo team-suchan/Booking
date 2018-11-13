@@ -47,8 +47,6 @@ public class UserController {
         if (!password.equals(user.getPassword())) {
             throw new BookingException(ResultEnum.PASSWORD_ERROR);
         }
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
 
         //设置token
         String token = UUID.randomUUID().toString();
@@ -57,7 +55,9 @@ public class UserController {
         //设置token到Cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
-        return ResultVOUtil.success(userVO);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        return ResultVOUtil.success(map);
     }
 
     @GetMapping("/logout")

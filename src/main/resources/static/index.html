@@ -15,11 +15,6 @@
 				$.ajax({
 				url: 'http://111.230.220.64:8080/api/getLoginUser',
 				type: "GET",
-				dataType: "json",
-				xhrFields: {
-					withCredentials: true
-				},
-				crossDomain : true,
 				success: function(data) {
 					if(data.code == 0) {
 						$(".order-center").html(data.data.username);
