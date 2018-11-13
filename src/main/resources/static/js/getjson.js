@@ -96,6 +96,7 @@ function getnext() {
 				$(".project-list").empty();
 				$(".pageNum.active").html(value);
 				getdata(data);
+<<<<<<< HEAD
 			}
 		}
 	});
@@ -113,6 +114,8 @@ function signout(){
 		success: function(data) {
 			if(data.code == 0) {
 				location.href = "index.html";
+=======
+>>>>>>> d60314a51ea2bef857447d8229fe1722dd3bd347
 			}
 		}
 	});

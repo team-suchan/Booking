@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,9 @@ public class ActivityController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private static StringRedisTemplate redisTemplate;
 
     @GetMapping("")
     public ResultVO list(@RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -98,7 +102,7 @@ public class ActivityController {
             throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
         }
         //判断权限
-        AuthUtil.auth(request, activity.getOwnerId());
+        AuthUtil.auth(redisTemplate, request, activity.getOwnerId());
 
         BeanUtils.copyProperties(form, activity);
         activityService.save(activity);

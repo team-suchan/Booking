@@ -17,11 +17,7 @@ public class CategoryRepositoryTest {
     private CategoryRepository repository;
 
     @Test
-    public void saveTest() {
-        Category category = new Category();
-        category.setCategoryId(KeyUtil.getUniqueKey());
-        category.setCategoryName("电影");
-        Category result = repository.save(category);
-        Assert.assertNotNull(result);
+    public void findTest() {
+        repository.findAll();
     }
 }

@@ -14,7 +14,8 @@ public enum ResultEnum {
     PHONE_MISMATCHING(6, "手机号与帐号不匹配"),
     ACTIVITY_ID_EMPTY(7, "活动ID为空"),
     SESSION_ID_NOT_EXIST(8, "不存在该场次ID"),
-    AUTH_FAIL(9, "你没有此权限进行该操作或未登录！");
+    AUTH_FAIL(9, "你没有此权限进行该操作或未登录！"),
+    NOT_LOGIN(10, "你还没有登录！");
 
     private Integer code;
 

@@ -13,6 +13,7 @@ import com.newboynb.bookingsystem.utils.KeyUtil;
 import com.newboynb.bookingsystem.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,9 @@ public class SessionController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @GetMapping("")
     public ResultVO findByActivityId(String activityId) {
@@ -84,6 +88,6 @@ public class SessionController {
         if (activity == null) {
             throw new BookingException(ResultEnum.ACTIVITY_NOT_EXIST);
         }
-        AuthUtil.auth(request, activity.getOwnerId());
+        AuthUtil.auth(redisTemplate, request, activity.getOwnerId());
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -44,8 +45,6 @@ public class UserController {
         if (!password.equals(user.getPassword())) {
             throw new BookingException(ResultEnum.PASSWORD_ERROR);
         }
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
 
         //设置token
         String token = UUID.randomUUID().toString();
@@ -54,7 +53,42 @@ public class UserController {
         //设置token到Cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
-        return ResultVOUtil.success(userVO);
+        return ResultVOUtil.success(null);
+    }
+
+    @GetMapping("/logout")
+    public ResultVO logout(HttpServletRequest request, HttpServletResponse response) {
+        //从cookie查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null) {
+            //清除redis
+            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            //清除cookie
+            CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+        }
+        return ResultVOUtil.success(null);
+    }
+
+    /**
+     * 获取当前登录用户的userId
+     * @return
+     */
+    @GetMapping("/getLoginUser")
+    public ResultVO getLoginUserInfo(HttpServletRequest request) {
+        //从cookie查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null) {
+            String userId = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            User user = userService.findById(userId);
+            // 如何没有该ID对应的用户返回错误信息
+            if (user == null) {
+                throw new BookingException(ResultEnum.USER_NOT_EXIST);
+            }
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            return ResultVOUtil.success(userVO);
+        }
+        throw new BookingException(ResultEnum.NOT_LOGIN);
     }
 
     /**
@@ -65,7 +99,7 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public ResultVO getUserInfo(@PathVariable(value = "userId") String userId, HttpServletRequest request) {
         //判断权限
-        AuthUtil.auth(request, userId);
+        AuthUtil.auth(redisTemplate, request, userId);
         // 从数据库中查找用户信息
         User user = userService.findById(userId);
         // 如何没有该ID对应的用户返回错误信息
@@ -102,7 +136,7 @@ public class UserController {
     @PutMapping("/user/{userId}")
     public ResultVO update(@PathVariable(value = "userId") String userId, String phone, HttpServletRequest request) {
         //判断权限
-        AuthUtil.auth(request, userId);
+        AuthUtil.auth(redisTemplate, request, userId);
 
         User user = userService.findById(userId);
         if (user == null) {
