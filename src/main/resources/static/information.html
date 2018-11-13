@@ -5,29 +5,29 @@
 		<meta charset=utf-8>
 		<title>个人中心-个人信息</title>
 		<link href="css/trade_list_out.css" rel="stylesheet">
-		<link href="css/information.css" rel="stylesheet"> 
 		<script src="js/jquery.min.js" type="text/javascript"></script>
 		<script>
-			$(function(){
-				var loc = location.href;
-			  	var n1 = loc.length;
-			  	var n2 = loc.indexOf("userId=");
-			  	var id = loc.substr(n2+7, n1-n2-6);
-			  	if(n2!=-1){
-			  		$.ajax({
-						url: 'http://111.230.220.64:8080/api/user/' + id,
-						type: "GET",
-						success: function(data) {
-							$("#comeon").html("欢迎回来！"+data.data.username);
+			$(function() {
+				$.ajax({
+					url: 'http://111.230.220.64:8080/api/getLoginUser',
+					type: "GET",
+					dataType: "json",
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					success: function(data) {
+						if(data.code == 0) {
+							$("#comeon").html("欢迎回来！" + data.data.username);
 							$(".userid").html(data.data.userId);
 							$(".username").html(data.data.username);
 							$(".phone").html(data.data.phone);
 							$(".email").html(data.data.email);
 						}
-					});
-			  		document.getElementById("myBooking").href="personal.html?"+"userId="+id;
-			  		document.getElementById("back").href="index.html?"+"userId="+id;
-			  	};
+					}
+				});
+				document.getElementById("myBooking").href = "personal.html";
+				document.getElementById("back").href = "index.html";
 			});
 		</script>
 	</head>
@@ -77,39 +77,39 @@
 						<div data-v-de13881c="" class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%;">
 
 							<div class="ibox-content clearfix amp-form-style1">
-								
-									<table class="ui_table">
-										<tbody>
-											<tr>
-												<th width="154">用户ID：</th>
-												<td>
-													<p class="userid"></p>
-												</td>
-											</tr>
-											
-											<tr>
-												<th width="154">昵称：</th>
-												<td>
-													<p class="username"></p>
-												</td>
-											</tr>
-											
-											<tr>
-												<th width="154">手机：</th>
-												<td>
-													<p class="phone"></p>
-												</td>
-											</tr>
-											
-											<tr>
-												<th width="154">邮箱：</th>
-												<td>
-													<p class="email"></p>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									
+
+								<table class="ui_table">
+									<tbody>
+										<tr>
+											<th width="154">用户ID：</th>
+											<td>
+												<p class="userid"></p>
+											</td>
+										</tr>
+
+										<tr>
+											<th width="154">昵称：</th>
+											<td>
+												<p class="username"></p>
+											</td>
+										</tr>
+
+										<tr>
+											<th width="154">手机：</th>
+											<td>
+												<p class="phone"></p>
+											</td>
+										</tr>
+
+										<tr>
+											<th width="154">邮箱：</th>
+											<td>
+												<p class="email"></p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
 							</div>
 						</div>
 					</div>

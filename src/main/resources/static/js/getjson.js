@@ -3,9 +3,10 @@ function getdata(data) {
 	for(var i = 0; i < data.data.activityList.length; i++) {
 		//				var time = new Date(data.data.activityList[i].activityDate * 1000);
 		//				var timeType = time.getFullYear() + "." + time.getMonth() + "." + time.getDate() + " " + time.getHours() + ":" + time.getMinutes()
+
 		list +=
 			"<div class='project-list-item'>" +
-			"<a href='introducePage.html?activityId="+encodeURI(data.data.activityList[i].activityId)+"'>" +
+			"<a href='introducePage.html?activityId=" + encodeURI(data.data.activityList[i].activityId) + "'>" +
 			"<div class='project-list-item-img' style='background-image: url(img/zero2.gif);'></div>" +
 			"<div class='project-list-item-detail'>" +
 			"<div class='project-list-item-title'>" + data.data.activityList[i].activityName + " (" + data.data.activityList[i].category.categoryName + ")</div>" +
@@ -33,12 +34,27 @@ function getclicked(number) {
 	});
 };
 
-function getname(userId){
+function getname() {
 	$.ajax({
-		url: 'http://111.230.220.64:8080/api/user/' + userId,
+		url: 'http://111.230.220.64:8080/api/getLoginUser',
 		type: "GET",
+		dataType: "json",
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true,
 		success: function(data) {
-			$(".order-center").html(data.data.username);
+			if(data.code == 0) {
+				$(".order-center").html(data.data.username);
+				$(".order-and-icon-wrapper").click(function() {
+					location.href = "information.html";
+				});
+			};
+			if(data.code == 10) {
+				$(".order-and-icon-wrapper").click(function() {
+					location.href = "login.html";
+				});
+			}
 		}
 	});
 };
@@ -54,36 +70,56 @@ function getall() {
 		}
 	});
 };
-function getback(){
-	var value = parseInt($("#pageNumber").text())-1;
+
+function getback() {
+	var value = parseInt($("#pageNumber").text()) - 1;
 	$.ajax({
-		url: 'http://111.230.220.64:8080/api/activity?page='+value,
+		url: 'http://111.230.220.64:8080/api/activity?page=' + value,
 		type: "GET",
 		success: function(data) {
-			if(data.data.totalPages>=value){
-			$(".project-list").empty();
-			$(".pageNum.active").html(value);
-			getdata(data);
+			if(data.data.totalPages >= value) {
+				$(".project-list").empty();
+				$(".pageNum.active").html(value);
+				getdata(data);
 			}
 		}
 	});
 };
+
 function getnext() {
-	var value = parseInt($("#pageNumber").text())+1;
+	var value = parseInt($("#pageNumber").text()) + 1;
 	$.ajax({
-		url: 'http://111.230.220.64:8080/api/activity?page='+value,
+		url: 'http://111.230.220.64:8080/api/activity?page=' + value,
 		type: "GET",
 		success: function(data) {
-			if(data.data.totalPages>=value){
-			$(".project-list").empty();
-			$(".pageNum.active").html(value);
-			getdata(data);
+			if(data.data.totalPages >= value) {
+				$(".project-list").empty();
+				$(".pageNum.active").html(value);
+				getdata(data);
+			}
+		}
+	});
+};
+function signout(){
+	$.ajax({
+		url: 'http://111.230.220.64:8080/api/logout',
+		type: "GET",
+		dataType: "json",
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true,
+		async: false,
+		success: function(data) {
+			if(data.code == 0) {
+				location.href = "index.html";
 			}
 		}
 	});
 };
 $(document).ready(function() {
 	getall();
+	getname();
 	$.ajax({
 		url: 'http://111.230.220.64:8080/api/category',
 		type: "GET",

@@ -15,18 +15,22 @@
 			$(function() {
 				var loc = location.href;
 				var n1 = loc.length;
-				var n2 = loc.indexOf("userId=");
-				var id = decodeURI(loc.substr(n2 + 7, n1 - n2 - 6));
-				if(n2 != -1) {
-					getname(id);
-					$(".order-and-icon-wrapper").click(function() {
-						location.href = "information.html?" + "userId=" + encodeURI(id);
+				var n4 = loc.indexOf("activityId=");
+				var aid = decodeURI(loc.substr(n4 + 11, n1 - n4 - 10));
+				if(n4 != -1) {
+					$.ajax({
+						url: 'http://111.230.220.64:8080/api/activity/' + aid,
+						type: "GET",
+						success: function(data) {
+							$("#activityName").html(data.data.activityName);
+							$("#activityDate").html(data.data.activityDate);
+							$("#category").html(data.data.category.categoryName);
+							$("#owner").html(data.data.ownerId);
+							$("#activityDescribe").html(data.data.activityDescribe);
+							$("#activityAddress").html(data.data.activityAddress);
+						}
 					});
-				} else {
-					$(".order-and-icon-wrapper").click(function() {
-						location.href = "login.html";
-					});
-				}
+				};
 			});
 		</script>
 	</head>
@@ -35,17 +39,21 @@
 		<div id="app">
 			<div data-v-7becb7b9="" class="nav-header-wrapper">
 				<div data-v-7becb7b9="" class="nav-header">
-					<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
-					<div data-v-7becb7b9="" class="nav-header-mainsite">活动</div>
-					<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
-					<div data-v-7becb7b9="" class="nav-header-mainsite">场地预定</div>
+					<a href="index.html">
+						<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
+					</a>
+					<a href="index.html">
+						<div data-v-7becb7b9="" class="nav-header-mainsite">选择活动</div>
+					</a>
+					<a href="release.html">
+						<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
+					</a>
+					<a href="release.html">
+						<div data-v-7becb7b9="" class="nav-header-mainsite">发布活动</div>
+					</a>
 					<div data-v-7becb7b9="" class="nav-header-search-bar-wrapper">
-						<input data-v-7becb7b9="" placeholder="活动、嘉宾、场馆" type="text" name="" class="nav-header-search-bar">
-						<div data-v-7becb7b9="" class="icon search-icon">
-							<a data-v-7becb7b9="" target="_blank" href="javascript:void(0);" class="search-link"></a>
-						</div>
 					</div>
-
+					<div data-v-7becb7b9="" class="signout" onclick="signout()">注销帐号</div>
 					<div data-v-7becb7b9="" class="order-and-icon-wrapper">
 						<div data-v-7becb7b9="" class="icon user-icon"></div>
 						<div data-v-7becb7b9="" class="order-center">个人中心</div>
@@ -58,21 +66,17 @@
 			<hr width="100%" size="4" color="#CCCCCC">
 			<br/><br/>
 			<div class="picture"><img src="img/zero2.gif" width="263" height="393"></div>
-			<!--图片div-->
 			<div class="rightform">
-				<!--电影简介div-->
-				<h3 style="font-size:24px">铁血战士</h3>
-				<p class="pingfen">6.9分</p>
-				<p><span>时间：</span>2018年10月26日</p>
-				<p><span>类型：</span>动作、冒险、科幻</p>
-				<p><span>剧情：</span>一位男孩（雅各布特伦布莱 饰）偶然间打开了尘封的箱子，触发了特殊机关，唤醒了宇宙最强猎手--铁血战士。其父亲（波伊德霍布鲁克 饰）与一名愤世嫉俗的女生物学家（奥莉薇雅玛恩 饰）发现了外星物种入侵的迹象。为保护家人和赖以生存的地球家园，他们担负起拯救人类的使命，组成一支精英校对共同对抗这些外来侵略者...
-
-					<p><span>场次：</span></p>
-
-				</p>
+				<h3 style="font-size:24px" id="activityName">XXXX</h3>
+				<p class="pingfen">推荐</p>
+				<p><span>时间：</span><span id="activityDate">xx年x月x日</span></p>
+				<p><span>类型：</span><span id="category">xx</span></p>
+				<p><span>举办方：</span><span id="owner">xx</span></p>
+				<p><span>简介：</span><span id="activityDescribe">暂时没有</span></p>
+				<p><span>场地：</span><span id="activityAddress">xx</span></p>
 				<p>
 					<div id="login_click">
-						<a id="btlogin" href="订票页面.html">订 票</a>
+						<a id="btlogin" href="book.html">预定</a>
 					</div>
 				</p>
 			</div>

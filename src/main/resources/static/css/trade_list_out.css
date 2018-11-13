@@ -639,6 +639,7 @@ textarea {
 }
 
 input:focus,
+select:focus,
 textarea:focus {
 	border-color: #00a1d6
 }

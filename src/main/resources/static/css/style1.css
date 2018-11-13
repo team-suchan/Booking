@@ -87,14 +87,18 @@
 	background: #fff;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2)
 }
-
+.signout:hover{
+	color: #f25d8e;
+	cursor: pointer
+}
 .nav-header-wrapper .order-and-icon-wrapper[data-v-7becb7b9] {
 	margin-left: 25px;
 	z-index: 100;
 	display: -ms-flexbox;
 	display: flex;
 	-ms-flex-align: center;
-	align-items: center
+	align-items: center;
+	
 }
 
 .nav-header-wrapper .order-and-icon-wrapper[data-v-7becb7b9]:hover {
@@ -916,6 +920,8 @@ a {
 }
 
 a,
+select,
+button,
 input {
 	outline: none;
 	cursor: pointer
@@ -977,12 +983,6 @@ textarea {
 
 textarea {
 	resize: none
-}
-
-select {
-	appearance: none;
-	-moz-appearance: none;
-	-webkit-appearance: none
 }
 
 select::-ms-expand {
