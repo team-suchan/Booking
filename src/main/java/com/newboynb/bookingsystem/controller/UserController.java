@@ -21,9 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -55,9 +53,7 @@ public class UserController {
         //设置token到Cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
-        Map<String, String> map = new HashMap<>();
-        map.put("token", token);
-        return ResultVOUtil.success(map);
+        return ResultVOUtil.success(null);
     }
 
     @GetMapping("/logout")
