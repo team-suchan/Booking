@@ -17,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -55,6 +58,41 @@ public class UserController {
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
         return ResultVOUtil.success(userVO);
+    }
+
+    @GetMapping("/logout")
+    public ResultVO logout(HttpServletRequest request, HttpServletResponse response) {
+        //从cookie查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null) {
+            //清除redis
+            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            //清除cookie
+            CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+        }
+        return ResultVOUtil.success(null);
+    }
+
+    /**
+     * 获取当前登录用户的userId
+     * @return
+     */
+    @GetMapping("/getLoginUser")
+    public ResultVO getLoginUserInfo(HttpServletRequest request) {
+        //从cookie查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null) {
+            String userId = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            User user = userService.findById(userId);
+            // 如何没有该ID对应的用户返回错误信息
+            if (user == null) {
+                throw new BookingException(ResultEnum.USER_NOT_EXIST);
+            }
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            return ResultVOUtil.success(userVO);
+        }
+        throw new BookingException(ResultEnum.NOT_LOGIN);
     }
 
     /**
