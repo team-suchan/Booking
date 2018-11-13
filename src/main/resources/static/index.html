@@ -12,22 +12,30 @@
 		<script src="js/getjson.js" type="text/javascript"></script>
 		<script>
 			$(function(){
-				var loc = location.href;
-			  	var n1 = loc.length;
-			  	var n2 = loc.indexOf("userId=");
-			  	var id = decodeURI(loc.substr(n2+7, n1-n2-6));
-			  	if(n2!=-1){
-			  		getname(id);
-			  		$(".order-and-icon-wrapper").click(function(){
-			  			location.href="information.html?"+"userId="+encodeURI(id);
-			  		});
-			  	}
-			  	else{
-			  		$(".order-and-icon-wrapper").click(function(){
-			  			location.href="login.html";
-			  		});
-			  	}
+				$.ajax({
+				url: 'http://111.230.220.64:8080/api/getLoginUser',
+				type: "GET",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true
+				},
+				crossDomain : true,
+				success: function(data) {
+					if(data.code == 0) {
+						$(".order-center").html(data.data.username);
+						$(".order-and-icon-wrapper").click(function() {
+							location.href = "information.html";
+						});
+					};
+					if(data.code == 10) {
+						$(".order-and-icon-wrapper").click(function() {
+							location.href = "login.html";
+						});
+					}
+				}
 			});
+			})
+			
 		</script>
 	</head>
 
@@ -36,14 +44,10 @@
 			<div data-v-7becb7b9="" class="nav-header-wrapper">
 				<div data-v-7becb7b9="" class="nav-header">
 					<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
-					<div data-v-7becb7b9="" class="nav-header-mainsite">活动</div>
+					<div data-v-7becb7b9="" class="nav-header-mainsite">选择活动</div>
 					<div data-v-7becb7b9="" class="icon nav-header-tv-icon"></div>
-					<div data-v-7becb7b9="" class="nav-header-mainsite">场地预定</div>
+					<div data-v-7becb7b9="" class="nav-header-mainsite">发布活动</div>
 					<div data-v-7becb7b9="" class="nav-header-search-bar-wrapper">
-						<input data-v-7becb7b9="" placeholder="活动、嘉宾、场馆" type="text" name="" class="nav-header-search-bar">
-						<div data-v-7becb7b9="" class="icon search-icon">
-							<a data-v-7becb7b9="" target="_blank" href="javascript:void(0);" class="search-link"></a>
-						</div>
 					</div>
 
 					<div data-v-7becb7b9="" class="order-and-icon-wrapper">
@@ -81,7 +85,7 @@
 			</div>
 
 		</div>
-		
+
 		<div class="footer">
 			<div class="border"></div>
 		</div>

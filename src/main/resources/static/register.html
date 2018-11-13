@@ -18,6 +18,8 @@
 						$.ajax({
 							url: "http://111.230.220.64:8080/api/user",
 							type: "POST",
+							async: false,
+							dataType: "json",
 							data: {
 								"email": emailValue,
 								"username": usernameValue,
@@ -73,7 +75,7 @@
                 <div class="form-group">
                     <input type="text" id="phone" class="form-control" placeholder="请输入手机" required="">
                 </div>
-                <button type="submit" id="register" class="btn btn-primary block full-width m-b">注 册</button>
+                <button type="button" id="register" class="btn btn-primary block full-width m-b">注 册</button>
 
                 <p class="text-muted text-center"><small>已经有账户了？</small><a href="login.html">点此登录</a>
                 </p>
