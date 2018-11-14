@@ -17,7 +17,7 @@ public class ActivityVO {
     private Float ActivityGrade;
 
 //    @JsonSerialize(using = Date2LongSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date activityDate;
 
     private String activityDescribe;
