@@ -96,6 +96,26 @@ function getnext() {
 				$(".project-list").empty();
 				$(".pageNum.active").html(value);
 				getdata(data);
+<<<<<<< HEAD
+			}
+		}
+	});
+};
+function signout(){
+	$.ajax({
+		url: 'http://111.230.220.64:8080/api/logout',
+		type: "GET",
+		dataType: "json",
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true,
+		async: false,
+		success: function(data) {
+			if(data.code == 0) {
+				location.href = "index.html";
+=======
+>>>>>>> d60314a51ea2bef857447d8229fe1722dd3bd347
 			}
 		}
 	});
