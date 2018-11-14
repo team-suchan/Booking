@@ -7,7 +7,6 @@
 		<link href="css/trade_list_out.css" rel="stylesheet">
 		<script src="js/jquery.min.js" type="text/javascript"></script>
 		<script>
-<<<<<<< HEAD
 			$(function() {
 				$.ajax({
 					url: 'http://111.230.220.64:8080/api/getLoginUser',
@@ -29,24 +28,6 @@
 				});
 				document.getElementById("myBooking").href = "personal.html";
 				document.getElementById("back").href = "index.html";
-=======
-			$(function(){
-			  		$.ajax({
-						url: 'http://111.230.220.64:8080/api/getLoginUser',
-						type: "GET",
-						success: function(data) {
-							if(data.code == 0) {
-								$("#comeon").html("欢迎回来！"+data.data.username);
-								$(".userid").html(data.data.userId);
-								$(".username").html(data.data.username);
-								$(".phone").html(data.data.phone);
-								$(".email").html(data.data.email);
-							}
-						}
-					});
-			  		document.getElementById("myBooking").href="personal.html";
-			  		document.getElementById("back").href="index.html";
->>>>>>> d60314a51ea2bef857447d8229fe1722dd3bd347
 			});
 		</script>
 	</head>
